@@ -1,1 +1,108 @@
- <h1>Hello world</h1>
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <title>질문 토글</title>
+</head>
+<style>
+  body {
+    font-family: Arial;
+    margin: 0;
+    overflow: hidden;
+    background: #f0f0f0;
+  }
+
+  #gameArea {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    background-color: #cfe4fc;
+  }
+
+  .bug {
+    position: absolute;
+    width: 50px;
+    height: 50px;
+    background-color: red;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 10px #333;
+  }
+
+  #scoreBoard {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  #timer {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+</style>
+
+<body>
+
+  <div id="gameArea">
+    <div id="scoreBoard">점수: 0</div>
+    <div id="timer">남은 시간: 30초</div>
+  </div>
+
+
+  <script>
+    const gameArea = document.getElementById("gameArea");
+    const scoreBoard = document.getElementById("scoreBoard");
+    const timerBoard = document.getElementById("timer");
+    let score = 0;
+    let timeLeft = 30;
+    let gameInterval;
+
+    function spawnBug() {
+      const bug = document.createElement("div");
+      bug.className = "bug";
+      const x = Math.random() * (window.innerWidth - 50);
+      const y = Math.random() * (window.innerHeight - 50);
+      bug.style.left = `${x}px`;
+      bug.style.top = `${y}px`;
+
+      bug.onclick = function () {
+        score++;
+        scoreBoard.innerText = `점수: ${score}`;
+        bug.remove();
+      };
+
+      gameArea.appendChild(bug);
+
+      // 자동으로 사라짐
+      setTimeout(() => {
+        bug.remove();
+      }, 1000);
+    }
+
+    function startGame() {
+      gameInterval = setInterval(spawnBug, 800);
+
+      const timer = setInterval(() => {
+        timeLeft--;
+        timerBoard.innerText = `남은 시간: ${timeLeft}초`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timer);
+          clearInterval(gameInterval);
+          alert(`게임 종료! 당신의 점수는 ${score}점입니다 🎉`);
+        }
+      }, 1000);
+    }
+
+    startGame();
+
+  </script>
+</body>
+
+</html>
